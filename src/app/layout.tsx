@@ -5,6 +5,8 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import Footer from '@/app/components/Footer';
+import Header from '@/app/components/Header';
 import { siteConfig } from '@/constant/config';
 
 // !STARTERCONF Change these default meta
@@ -56,7 +58,13 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <div className='flex h-screen flex-col justify-between font-sans'>
+          <Header />
+          <main className='mb-auto'>{children}</main>
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }
