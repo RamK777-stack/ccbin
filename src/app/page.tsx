@@ -1,8 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 import '@/lib/env';
 
+const Editor = dynamic(() => import('@/app/components/Editor'), {
+  ssr: false,
+});
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -16,5 +20,9 @@ import '@/lib/env';
 // to customize the default configuration.
 
 export default function HomePage() {
-  return <section className='bg-white'></section>;
+  return (
+    <section className='bg-white'>
+      <Editor />
+    </section>
+  );
 }
