@@ -1,7 +1,6 @@
 'use client';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import CodeBox from '@bomdi/codebox';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import AttachesTool from '@editorjs/attaches';
@@ -55,7 +54,7 @@ import Underline from '@editorjs/underline';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Warning from '@editorjs/warning';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, useEffect, useRef } from 'react';
 
 const DEFAULT_INITIAL_DATA = {
   time: new Date().getTime(),
@@ -71,7 +70,9 @@ const DEFAULT_INITIAL_DATA = {
 };
 
 interface PropTypes {
-  setOutputData?: Dispatch<SetStateAction<OutputData | null>>;
+  content?: OutputData | null;
+  onlyReadable?: boolean;
+  setOutputData?: Dispatch<OutputData | null>;
 }
 
 interface EditorJSInstance {
@@ -83,7 +84,11 @@ interface EditorJSInstance {
   // Add other methods/properties you plan to use
 }
 
-export default function Editor({ setOutputData }: PropTypes) {
+export default function Editor({
+  setOutputData,
+  content,
+  onlyReadable,
+}: PropTypes) {
   const ejInstance = useRef<EditorJSInstance | null>(null);
 
   const initEditor = () => {
@@ -93,10 +98,18 @@ export default function Editor({ setOutputData }: PropTypes) {
         ejInstance.current = editor;
       },
       autofocus: true,
-      data: DEFAULT_INITIAL_DATA,
+      readOnly: onlyReadable || false,
+      data: content || DEFAULT_INITIAL_DATA,
       onChange: async () => {
-        const content = await editor.saver.save();
-        setOutputData?.(content);
+        if (!onlyReadable) {
+          const contentData = await editor.saver.save();
+          // console.log(content);
+          // Check if setOutputData is defined and content is not undefined
+          if (setOutputData && contentData !== undefined) {
+            // Call setOutputData with content (which is guaranteed to be OutputData here)
+            setOutputData(contentData);
+          }
+        }
       },
       tools: {
         header: Header,
@@ -179,15 +192,15 @@ export default function Editor({ setOutputData }: PropTypes) {
           },
         },
         delimiter: Delimiter,
-        codeBox: {
-          class: CodeBox,
-          config: {
-            themeURL:
-              'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css', // Optional
-            themeName: 'atom-one-dark',
-            useDefaultTheme: 'dark',
-          },
-        },
+        // codeBox: {
+        //   class: CodeBox,
+        //   config: {
+        //     themeURL:
+        //       'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css', // Optional
+        //     themeName: 'atom-one-dark',
+        //     useDefaultTheme: 'dark',
+        //   },
+        // },
       },
     });
   };
@@ -203,7 +216,7 @@ export default function Editor({ setOutputData }: PropTypes) {
       ejInstance.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [content]);
 
   return (
     <div className='flex flex-col mt-10'>
