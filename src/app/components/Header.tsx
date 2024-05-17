@@ -7,7 +7,7 @@ export default function Header() {
       <div className='flex space-x-5 items-center'>
         <SunIcon className='size-8 text-white' />
         <button className='text-center bg-green-600 outline-none rounded-full px-5 py-2 text-sm'>
-          New Snippet
+          New Paste
         </button>
       </div>
     </div>

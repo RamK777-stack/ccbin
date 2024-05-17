@@ -54,7 +54,7 @@ import Underline from '@editorjs/underline';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Warning from '@editorjs/warning';
-import { Dispatch, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DEFAULT_INITIAL_DATA = {
   time: new Date().getTime(),
@@ -72,7 +72,7 @@ const DEFAULT_INITIAL_DATA = {
 interface PropTypes {
   content?: OutputData | null;
   onlyReadable?: boolean;
-  setOutputData?: Dispatch<OutputData | null>;
+  saveData?: (payload: OutputData) => Promise<OutputData>;
 }
 
 interface EditorJSInstance {
@@ -84,12 +84,9 @@ interface EditorJSInstance {
   // Add other methods/properties you plan to use
 }
 
-export default function Editor({
-  setOutputData,
-  content,
-  onlyReadable,
-}: PropTypes) {
+export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
   const ejInstance = useRef<EditorJSInstance | null>(null);
+  const [editorState, saveEditorState] = useState<OutputData>();
 
   const initEditor = () => {
     const editor = new EditorJS({
@@ -104,10 +101,10 @@ export default function Editor({
         if (!onlyReadable) {
           const contentData = await editor.saver.save();
           // console.log(content);
-          // Check if setOutputData is defined and content is not undefined
-          if (setOutputData && contentData !== undefined) {
-            // Call setOutputData with content (which is guaranteed to be OutputData here)
-            setOutputData(contentData);
+          // Check if saveData is defined and content is not undefined
+          if (contentData !== undefined) {
+            // Call saveData with content (which is guaranteed to be OutputData here)
+            saveEditorState(contentData);
           }
         }
       },
@@ -218,10 +215,25 @@ export default function Editor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
+  const handleSave = () => {
+    // in this I need to call api and pass editor.saver.save()
+    if (saveData && editorState) {
+      saveData(editorState);
+    }
+  };
+
   return (
     <div className='flex flex-col mt-10'>
       <div className='w-[50rem] self-center shadow-[0_-3px_29px_-5px_rgba(34,39,47,.14)] rounded-lg px-10 py-10 min-h-[40rem]'>
         <div id='editorjs'></div>
+      </div>
+      <div className='flex justify-center mt-10'>
+        <button
+          className='text-center text-white bg-green-600 outline-none rounded-full px-6 py-3 text-md'
+          onClick={handleSave}
+        >
+          Share Paste
+        </button>
       </div>
     </div>
   );

@@ -32,7 +32,11 @@ export async function POST(request: NextRequest) {
   try {
     const client = await clientPromise;
     const db = client.db('ccbin');
-    const result = await db.collection('pastes').insertOne(payload);
+    const document = {
+      ...payload,
+      expiryDate: new Date(payload.expiryDate), // Convert user-provided expiry date to Date object
+    };
+    const result = await db.collection('pastes').insertOne(document);
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (e) {
     return new Response('Internal Server Error', { status: 500 });
