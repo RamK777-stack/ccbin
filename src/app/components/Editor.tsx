@@ -229,7 +229,7 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
       </div>
       <div className='flex justify-center mt-10'>
         <button
-          className='text-center text-white bg-green-600 outline-none rounded-full px-6 py-3 text-md'
+          className='text-center text-white bg-green-600 outline-none rounded-lg px-6 py-3 text-md'
           onClick={handleSave}
         >
           Share Paste

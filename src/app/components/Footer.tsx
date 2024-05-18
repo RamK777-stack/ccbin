@@ -1,4 +1,4 @@
-import UnderlineLink from '@/components/links/UnderlineLink';
+import UnderlineLink from '@/app/components/links/UnderlineLink';
 
 export default function Footer() {
   return (

@@ -3,6 +3,7 @@
 import { OutputData } from '@editorjs/editorjs';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
+import { toast } from 'sonner';
 import '@/lib/env';
 
 const Editor = dynamic(() => import('@/app/components/Editor'), {
@@ -28,7 +29,17 @@ const saveData = async (payload: OutputData): Promise<OutputData> => {
   if (!response.ok) {
     throw new Error('Failed to save data');
   }
-  return (await response.json()) as OutputData;
+  const data = await response.json();
+  navigator.clipboard.writeText(
+    `${window.location.origin}/${data?.insertedId}`
+  );
+  toast('Copied to clipboard', {
+    description: `${window.location.origin}/${data?.insertedId}`,
+    action: {
+      label: 'Close',
+    },
+  });
+  return data as OutputData;
 };
 
 export default function HomePage() {

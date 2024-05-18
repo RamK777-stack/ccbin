@@ -7,6 +7,7 @@ import '@/styles/colors.css';
 
 import Footer from '@/app/components/Footer';
 import Header from '@/app/components/Header';
+import { Toaster } from '@/app/components/ui/sonner';
 import { siteConfig } from '@/constant/config';
 
 // !STARTERCONF Change these default meta
@@ -62,6 +63,7 @@ export default function RootLayout({
         <div className='flex h-screen flex-col justify-between font-sans'>
           <Header />
           <main className='mb-auto'>{children}</main>
+          <Toaster />
           <Footer />
         </div>
       </body>
