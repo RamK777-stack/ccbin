@@ -72,7 +72,7 @@ const DEFAULT_INITIAL_DATA = {
 interface PropTypes {
   content?: OutputData | null;
   onlyReadable?: boolean;
-  saveData?: (payload: OutputData) => Promise<OutputData>;
+  saveData?: (payload: OutputData) => void;
 }
 
 interface EditorJSInstance {

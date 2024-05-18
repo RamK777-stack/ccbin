@@ -6,9 +6,15 @@ import * as React from 'react';
 import { toast } from 'sonner';
 import '@/lib/env';
 
+interface PasteResponse {
+  insertedId: string;
+  acknowledged: boolean;
+}
+
 const Editor = dynamic(() => import('@/app/components/Editor'), {
   ssr: false,
 });
+
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -21,7 +27,7 @@ const Editor = dynamic(() => import('@/app/components/Editor'), {
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-const saveData = async (payload: OutputData): Promise<OutputData> => {
+const saveData = async (payload: OutputData) => {
   const response = await fetch('/api/pastes', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -29,17 +35,16 @@ const saveData = async (payload: OutputData): Promise<OutputData> => {
   if (!response.ok) {
     throw new Error('Failed to save data');
   }
-  const data = await response.json();
-  navigator.clipboard.writeText(
-    `${window.location.origin}/${data?.insertedId}`
-  );
-  toast('Copied to clipboard', {
-    description: `${window.location.origin}/${data?.insertedId}`,
-    action: {
-      label: 'Close',
+  toast.promise(response.json(), {
+    loading: 'Loading...',
+    success: (data: PasteResponse) => {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/${data?.insertedId}`
+      );
+      return `${window.location.origin}/${data?.insertedId} Copied to clipboard`;
     },
+    error: 'Error',
   });
-  return data as OutputData;
 };
 
 export default function HomePage() {

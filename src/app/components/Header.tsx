@@ -10,6 +10,8 @@ export default function Header() {
         <Image
           src='/images/logo-2.jpg'
           className='rounded-lg h-10'
+          width={40}
+          height={10}
           alt='logo'
         />
         <h2 className='text-xl'>CCBIN</h2>
