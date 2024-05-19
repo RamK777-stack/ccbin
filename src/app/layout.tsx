@@ -5,6 +5,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+// import '@/styles/custom.css'
 import Footer from '@/app/components/Footer';
 import Header from '@/app/components/Header';
 import { Toaster } from '@/app/components/ui/sonner';

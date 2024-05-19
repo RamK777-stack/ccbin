@@ -56,19 +56,6 @@ import Underline from '@editorjs/underline';
 import Warning from '@editorjs/warning';
 import { useEffect, useRef, useState } from 'react';
 
-const DEFAULT_INITIAL_DATA = {
-  time: new Date().getTime(),
-  blocks: [
-    {
-      type: 'header',
-      data: {
-        text: 'Type something...',
-        level: 2,
-      },
-    },
-  ],
-};
-
 interface PropTypes {
   content?: OutputData | null;
   onlyReadable?: boolean;
@@ -90,13 +77,14 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
 
   const initEditor = () => {
     const editor = new EditorJS({
+      placeholder: 'Let`s write an awesome story!',
       holder: 'editorjs',
       onReady: () => {
         ejInstance.current = editor;
       },
       autofocus: true,
       readOnly: onlyReadable || false,
-      data: content || DEFAULT_INITIAL_DATA,
+      data: content || undefined,
       onChange: async () => {
         if (!onlyReadable) {
           const contentData = await editor.saver.save();

@@ -2,6 +2,7 @@
 
 import { OutputData } from '@editorjs/editorjs';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import '@/lib/env';
 
@@ -37,7 +38,19 @@ export default function HomePage({ params }: { params: { _id: string } }) {
 
   return (
     <section className='bg-white'>
-      <Editor content={content} onlyReadable={true} />
+      {!content ? (
+        <div className='flex justify-center mt-10 text-xl'>
+          <Image
+            src='/svg/404.gif'
+            className='h-48 rounded'
+            height={20}
+            width={200}
+            alt='404 not found'
+          />
+        </div>
+      ) : (
+        <Editor content={content} onlyReadable={true} />
+      )}
     </section>
   );
 }
