@@ -35,15 +35,18 @@ const saveData = async (payload: OutputData) => {
   if (!response.ok) {
     throw new Error('Failed to save data');
   }
-  toast.promise(response.json(), {
+  const promise = new Promise((resolve) => resolve(response.json()));
+
+  toast.promise(promise, {
     loading: 'Loading...',
     success: (data: PasteResponse) => {
       navigator.clipboard.writeText(
         `${window.location.origin}/${data?.insertedId}`
       );
-      return `${window.location.origin}/${data?.insertedId} Copied to clipboard`;
+      return `${window.location.origin}/${data?.insertedId} - Copied to clipboard`;
     },
     error: 'Error',
+    duration: 1500,
   });
 };
 
