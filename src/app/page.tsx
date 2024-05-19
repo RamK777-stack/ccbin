@@ -27,7 +27,7 @@ const Editor = dynamic(() => import('@/app/components/Editor'), {
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-const saveData = async (payload: OutputData) => {
+const fetchAndParse = async (payload: OutputData) => {
   const response = await fetch('/api/pastes', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -35,9 +35,11 @@ const saveData = async (payload: OutputData) => {
   if (!response.ok) {
     throw new Error('Failed to save data');
   }
-  const promise = new Promise((resolve) => resolve(response.json()));
+  return await response.json();
+};
 
-  toast.promise(promise, {
+const saveData = async (payload: OutputData) => {
+  toast.promise(fetchAndParse(payload), {
     loading: 'Loading...',
     success: (data: PasteResponse) => {
       navigator.clipboard.writeText(
