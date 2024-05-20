@@ -56,6 +56,8 @@ import Underline from '@editorjs/underline';
 import Warning from '@editorjs/warning';
 import { useEffect, useRef, useState } from 'react';
 
+import { useEditorContext } from '@/app/context/EditorContext';
+
 interface PropTypes {
   content?: OutputData | null;
   onlyReadable?: boolean;
@@ -68,12 +70,15 @@ interface EditorJSInstance {
     save: () => Promise<OutputData>;
   };
   destroy: () => void;
+  clear: () => void;
   // Add other methods/properties you plan to use
 }
 
 export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
   const ejInstance = useRef<EditorJSInstance | null>(null);
   const [editorState, saveEditorState] = useState<OutputData>();
+
+  const { resetState } = useEditorContext();
 
   const initEditor = () => {
     const editor = new EditorJS({
@@ -190,6 +195,10 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
     });
   };
 
+  useEffect(() => {
+    ejInstance?.current?.clear();
+  }, [resetState]);
+
   // This will run only once
   useEffect(() => {
     if (ejInstance.current === null) {
@@ -215,14 +224,16 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
       <div className='w-[50rem] self-center shadow-[0_-3px_29px_-5px_rgba(34,39,47,.14)] rounded-lg px-10 py-10 min-h-[40rem]'>
         <div id='editorjs'></div>
       </div>
-      <div className='flex justify-center mt-10'>
-        <button
-          className='text-center text-white bg-green-600 outline-none rounded-lg px-6 py-3 text-md'
-          onClick={handleSave}
-        >
-          Share Paste
-        </button>
-      </div>
+      {!onlyReadable && (
+        <div className='flex justify-center mt-10'>
+          <button
+            className='text-center text-white bg-green-600 outline-none rounded-lg px-6 py-3 text-md'
+            onClick={handleSave}
+          >
+            Share Paste
+          </button>
+        </div>
+      )}
     </div>
   );
 }

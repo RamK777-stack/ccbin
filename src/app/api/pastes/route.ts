@@ -34,7 +34,9 @@ export async function POST(request: NextRequest) {
     const db = client.db('ccbin');
     const document = {
       ...payload,
-      expiryDate: new Date(payload.expiryDate), // Convert user-provided expiry date to Date object
+      expiryDate: payload.expiryDate
+        ? new Date(payload.expiryDate)
+        : new Date(Date.now() + 1 * (60 * 60 * 1000)), // Convert user-provided expiry date to Date object
     };
     const result = await db.collection('pastes').insertOne(document);
     return new Response(JSON.stringify(result), { status: 200 });
