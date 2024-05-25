@@ -56,12 +56,13 @@ import Underline from '@editorjs/underline';
 import Warning from '@editorjs/warning';
 import { useEffect, useRef, useState } from 'react';
 
+import SelectButton from '@/app/components/buttons/SelectButton';
 import { useEditorContext } from '@/app/context/EditorContext';
 
 interface PropTypes {
   content?: OutputData | null;
   onlyReadable?: boolean;
-  saveData?: (payload: OutputData) => void;
+  saveData?: (expirationTime: string, payload: OutputData) => void;
 }
 
 interface EditorJSInstance {
@@ -77,6 +78,7 @@ interface EditorJSInstance {
 export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
   const ejInstance = useRef<EditorJSInstance | null>(null);
   const [editorState, saveEditorState] = useState<OutputData>();
+  const [expirationTime, setExpirationTime] = useState<string>('3600');
 
   const { resetState } = useEditorContext();
 
@@ -215,13 +217,19 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
   const handleSave = () => {
     // in this I need to call api and pass editor.saver.save()
     if (saveData && editorState) {
-      saveData(editorState);
+      saveData(expirationTime, editorState);
     }
   };
 
   return (
     <div className='flex flex-col mt-10'>
       <div className='w-[50rem] self-center shadow-[0_-3px_29px_-5px_rgba(34,39,47,.14)] rounded-lg px-10 py-10 min-h-[40rem]'>
+        {!onlyReadable && (
+          <div className='flex justify-end px-10 pb-10'>
+            <SelectButton handleOnChange={setExpirationTime} />
+          </div>
+        )}
+
         <div id='editorjs'></div>
       </div>
       {!onlyReadable && (

@@ -38,7 +38,11 @@ const fetchAndParse = async (payload: OutputData) => {
   return await response.json();
 };
 
-const saveData = async (payload: OutputData) => {
+const saveData = async (expirationTime: string, editorState: OutputData) => {
+  const payload = {
+    expiryDate: new Date(Date.now() + parseInt(expirationTime) * 1000),
+    ...editorState,
+  };
   toast.promise(fetchAndParse(payload), {
     loading: 'Loading...',
     success: (data: PasteResponse) => {
