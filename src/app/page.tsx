@@ -57,9 +57,5 @@ const saveData = async (expirationTime: string, editorState: OutputData) => {
 };
 
 export default function HomePage() {
-  return (
-    <section className='bg-white'>
-      <Editor saveData={saveData} />
-    </section>
-  );
+  return <Editor saveData={saveData} />;
 }

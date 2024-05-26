@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
 import * as React from 'react';
 
 import '@/styles/globals.css';
@@ -62,14 +63,16 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <EditorProvider>
-          <div className='flex h-screen flex-col justify-between font-sans'>
-            <Header />
-            <main className='mb-auto'>{children}</main>
-            <Toaster />
-            <Footer />
+        <ThemeProvider>
+          <div className='flex h-screen flex-col justify-between font-sans dark:bg-slate-800'>
+            <EditorProvider>
+              <Header />
+              <main className='mb-auto'>{children}</main>
+              <Toaster />
+              <Footer />
+            </EditorProvider>
           </div>
-        </EditorProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

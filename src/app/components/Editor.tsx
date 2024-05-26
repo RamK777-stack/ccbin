@@ -223,7 +223,11 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
 
   return (
     <div className='flex flex-col mt-10'>
-      <div className='w-[50rem] self-center shadow-[0_-3px_29px_-5px_rgba(34,39,47,.14)] rounded-lg px-10 py-10 min-h-[40rem]'>
+      <div
+        className='w-[50rem] self-center shadow-[0_-3px_29px_-5px_rgba(34,39,47,.14)] 
+     dark:shadow-[0_-2px_15px_-3px_rgba(255,255,255,.25)] dark:text-white
+      rounded-lg px-10 py-10 min-h-[40rem]'
+      >
         {!onlyReadable && (
           <div className='flex justify-end px-10 pb-10'>
             <SelectButton handleOnChange={setExpirationTime} />

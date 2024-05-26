@@ -1,13 +1,15 @@
 'use client';
 
-import { SunIcon } from '@heroicons/react/24/outline';
+import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 
 import { useEditorContext } from '@/app/context/EditorContext';
 
 export default function Header() {
   const { resetEditorState } = useEditorContext();
+  const { theme, setTheme } = useTheme();
 
   const router = useRouter();
 
@@ -29,7 +31,25 @@ export default function Header() {
         <h2 className='text-xl'>CCBIN</h2>
       </div>
       <div className='flex space-x-5 items-center'>
-        <SunIcon className='size-8 text-white' />
+        {theme === 'dark' ? (
+          <div className='p-2 rounded-md cursor-pointer hover:bg-gray-800'>
+            <SunIcon
+              className='size-6 text-white'
+              onClick={() => {
+                setTheme('light');
+              }}
+            />
+          </div>
+        ) : (
+          <div className='p-2 rounded-md cursor-pointer hover:bg-gray-800'>
+            <MoonIcon
+              className='size-6 text-white'
+              onClick={() => {
+                setTheme('dark');
+              }}
+            />
+          </div>
+        )}
         <button
           className='text-center bg-green-600 outline-none rounded-lg px-5 py-2 text-sm'
           onClick={() => {
