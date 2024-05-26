@@ -234,7 +234,7 @@ export default function Editor({ saveData, content, onlyReadable }: PropTypes) {
           </div>
         )}
 
-        <div className='prose max-w-none' id='editorjs'></div>
+        <div className='prose max-w-none dark:text-white' id='editorjs'></div>
       </div>
       {!onlyReadable && (
         <div className='flex justify-center mt-10'>
