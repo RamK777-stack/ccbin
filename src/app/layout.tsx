@@ -64,7 +64,7 @@ export default function RootLayout({
     <html>
       <body>
         <ThemeProvider>
-          <div className='flex h-screen flex-col justify-between font-sans dark:bg-slate-800'>
+          <div className='flex min-h-screen flex-col justify-between font-sans dark:bg-slate-800'>
             <EditorProvider>
               <Header />
               <main className='mb-auto'>{children}</main>
